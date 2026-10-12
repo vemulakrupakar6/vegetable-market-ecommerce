@@ -1,0 +1,42 @@
+ .cart-page { padding: 25px 16px 35px; max-width: 650px; margin: auto; }
+.eyebrow { color: #246b45; font-size: 9px; letter-spacing: 1.5px; font-weight: 700; }
+h1 { font-family: Georgia, serif; font-size: 34px; margin: 10px 0 20px; }
+h1 em { color: #246b45; }
+.cart-items { background: #fff; border: 1px solid #e7e9e1; border-radius: 10px; padding: 0 12px; }
+.cart-item { display: grid; grid-template-columns: 54px minmax(0,1fr) auto; align-items: center; gap: 10px; padding: 14px 0; border-bottom: 1px solid #edf0e9; }
+.cart-item:last-child { border-bottom: 0; }
+.thumb { width: 54px; height: 54px; border-radius: 8px; background: #eef3e7; display: grid; place-items: center; color: #246b45; overflow: hidden; font-size: 23px; }
+.thumb img { width: 100%; height: 100%; object-fit: cover; }
+.item-details strong, .item-details small { display: block; }
+.item-details strong { font-size: 12px; }
+.item-details small { color: #788078; font-size: 9px; margin: 5px 0; }
+.remove { border: 0; background: none; padding: 0; color: #a05b50; font-size: 10px; }
+.qty { display: flex; align-items: center; gap: 8px; border: 1px solid #e7e9e1; border-radius: 6px; padding: 4px; font-size: 11px; }
+.qty button { border: 0; background: none; color: #246b45; font-size: 15px; }
+.checkout { background: white; border: 1px solid #e7e9e1; border-radius: 10px; padding: 18px; margin-top: 16px; }
+.checkout h2 { font-size: 16px; margin: 0 0 15px; }
+.cod { display: flex; align-items: center; gap: 10px; background: #f4f8ef; border: 1px solid #c7d9c0; border-radius: 7px; padding: 11px; margin-bottom: 18px; color: #246b45; }
+.cod ion-icon { font-size: 25px; }
+.cod strong, .cod small { display: block; }
+.cod strong { color: #1e3026; font-size: 11px; }
+.cod small { color: #788078; font-size: 9px; margin-top: 4px; }
+.cod > span { margin-left: auto; }
+ion-input, ion-textarea { margin-bottom: 12px; --border-radius: 7px; font-size: 12px; }
+.bill { display: flex; justify-content: space-between; padding: 10px 0; color: #788078; font-size: 11px; }
+.bill strong { color: #1e3026; }
+.free { color: #246b45 !important; }
+.grand { border-top: 1px solid #e7e9e1; margin-top: 5px; padding: 15px 0; color: #1e3026; font-weight: 700; }
+.grand strong { font-size: 19px; }
+.note { color: #899187; font-size: 9px; text-align: center; margin: 12px 0 0; }
+.error { background: #fff0ee; color: #a6342b; border-radius: 6px; padding: 10px; font-size: 11px; }
+.empty { text-align: center; padding: 45px 15px; border: 1px solid #e7e9e1; border-radius: 10px; background: white; }
+.empty ion-icon { font-size: 42px; color: #246b45; }
+.empty h2 { font-family: Georgia, serif; }
+.empty p { color: #788078; font-size: 12px; }
+.success-card { background: white; border: 1px solid #e7e9e1; border-radius: 12px; padding: 24px 18px; text-align: center; }
+.success-icon { display: grid; place-items: center; width: 54px; height: 54px; border-radius: 50%; margin: 0 auto 15px; background: #e5f1de; color: #246b45; font-size: 26px; }
+.success-card h1 { font-size: 28px; }
+.success-card > p { color: #788078; font-size: 11px; }
+.total-line, .receipt-line { display: flex; justify-content: space-between; gap: 12px; text-align: left; padding: 13px 0; border-top: 1px solid #e7e9e1; font-size: 11px; }
+.total-line strong { font-size: 18px; }
+.receipt-line strong { white-space: nowrap; }

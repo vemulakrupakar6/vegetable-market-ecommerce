@@ -1,0 +1,54 @@
+<section class="cart-page">
+  @if (success; as receipt) {
+    <div class="success-card">
+      <div class="success-icon">✓</div>
+      <span class="eyebrow">ORDER CONFIRMED</span>
+      <h1>Thank you, {{ receipt.customer_name }}.</h1>
+      <p>{{ receipt.message }}</p>
+      <div class="total-line"><span>Total to pay on delivery</span><strong>{{ receipt.total | currency:'INR':'symbol':'1.2-2' }}</strong></div>
+      @for (item of receipt.items; track item.id) {
+        <div class="receipt-line"><span>{{ item.name }} × {{ item.quantity }} {{ item.unit }}</span><strong>{{ item.line_total | currency:'INR':'symbol':'1.2-2' }}</strong></div>
+      }
+      <p class="note">This demo does not store order details or provide order history.</p>
+      <ion-button expand="block" color="success" routerLink="/">Continue shopping</ion-button>
+    </div>
+  } @else {
+    <div class="eyebrow">YOUR SELECTION</div>
+    <h1>Your <em>basket</em></h1>
+    @if (!cart.items.length) {
+      <div class="empty">
+        <ion-icon name="basket-outline"></ion-icon>
+        <h2>Your basket is empty</h2><p>Add fresh picks from the market.</p>
+        <ion-button color="success" routerLink="/">Explore vegetables</ion-button>
+      </div>
+    } @else {
+      <div class="cart-items">
+        @for (item of cart.items; track item.vegetable.id) {
+          <article class="cart-item">
+            <div class="thumb">
+              @if (api.imageUrl(item.vegetable.image_url); as image) { <img [src]="image" [alt]="item.vegetable.name"> }
+              @else { <ion-icon name="leaf-outline"></ion-icon> }
+            </div>
+            <div class="item-details"><strong>{{ item.vegetable.name }}</strong><small>{{ Number(item.vegetable.price) | currency:'INR':'symbol':'1.2-2' }} / {{ item.vegetable.unit }}</small><button class="remove" (click)="cart.remove(item.vegetable.id)">Remove</button></div>
+            <div class="qty"><button (click)="cart.setQuantity(item.vegetable.id, item.quantity - 1)">−</button><span>{{ item.quantity }}</span><button [disabled]="item.quantity >= item.vegetable.stock_quantity" (click)="cart.setQuantity(item.vegetable.id, item.quantity + 1)">＋</button></div>
+          </article>
+        }
+      </div>
+      <section class="checkout">
+        <h2>Delivery details</h2>
+        <div class="cod"><ion-icon name="cash-outline"></ion-icon><div><strong>Cash on Delivery</strong><small>Pay when your vegetables arrive</small></div><span>✓</span></div>
+        <form #f="ngForm" (ngSubmit)="placeOrder()">
+          <ion-input label="Full name" label-placement="stacked" fill="outline" name="customer_name" [(ngModel)]="customer_name" required maxlength="100" placeholder="Your name"></ion-input>
+          <ion-input label="Mobile number" label-placement="stacked" fill="outline" name="phone" [(ngModel)]="phone" required pattern="[0-9+() -]{7,20}" placeholder="10-digit phone number" type="tel"></ion-input>
+          <ion-textarea label="Delivery address" label-placement="stacked" fill="outline" name="address" [(ngModel)]="address" required maxlength="500" rows="3" placeholder="House number, street, area"></ion-textarea>
+          <div class="bill"><span>Subtotal</span><strong>{{ cart.total | currency:'INR':'symbol':'1.2-2' }}</strong></div>
+          <div class="bill"><span>Delivery</span><strong class="free">FREE</strong></div>
+          <div class="bill grand"><span>Total</span><strong>{{ cart.total | currency:'INR':'symbol':'1.2-2' }}</strong></div>
+          @if (error) { <p class="error" role="alert">{{ error }}</p> }
+          <ion-button type="submit" expand="block" color="success" [disabled]="f.invalid || placing">{{ placing ? 'Placing order...' : 'Place COD order' }}</ion-button>
+          <p class="note">No online payment required.</p>
+        </form>
+      </section>
+    }
+  }
+</section>

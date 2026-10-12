@@ -1,0 +1,51 @@
+<section class="hero">
+  <div class="hero-copy">
+    <div class="eyebrow">✳ FRESH FROM THE MARKET</div>
+    <h1>Good food.<br><em>Good mood.</em></h1>
+    <p>Everyday vegetables, handpicked for your kitchen. Freshness you can see, quality you can taste.</p>
+    <a class="hero-cta" href="#products">Shop vegetables <span>→</span></a>
+    <div class="hero-points"><span>✓ Fresh picks daily</span><span>✓ Pay on delivery</span></div>
+  </div>
+  <div class="hero-image">
+    <img src="https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=800&q=80" alt="Fresh vegetables">
+  </div>
+</section>
+
+<section id="products" class="products">
+  <div class="section-head">
+    <div><span class="eyebrow green">THE DAILY HARVEST</span><h2>Market <em>fresh picks</em></h2><p>Fresh essentials for everyday meals.</p></div>
+  </div>
+  <ion-searchbar [(ngModel)]="search" (ionInput)="loadProducts()" placeholder="Search vegetables..." [debounce]="250" show-clear-button="focus"></ion-searchbar>
+
+  @if (loading) {
+    <div class="state"><ion-spinner name="crescent"></ion-spinner><p>Loading fresh picks...</p></div>
+  } @else if (error) {
+    <div class="state error"><p>{{ error }}</p><ion-button color="success" (click)="loadProducts()">Try again</ion-button></div>
+  } @else if (!vegetables.length) {
+    <div class="state"><ion-icon name="leaf-outline"></ion-icon><p>No vegetables found.</p></div>
+  } @else {
+    <div class="product-grid">
+      @for (vegetable of vegetables; track vegetable.id) {
+        <article class="product-card">
+          <div class="photo">
+            @if (api.imageUrl(vegetable.image_url); as image) {
+              <img [src]="image" [alt]="vegetable.name">
+            } @else {
+              <div class="placeholder"><ion-icon name="leaf-outline"></ion-icon><span>{{ vegetable.name }}</span></div>
+            }
+            <span class="fresh-label">FRESH</span>
+          </div>
+          <div class="product-info">
+            <h3>{{ vegetable.name }}</h3>
+            <p>{{ vegetable.description || 'Fresh market selection' }}</p>
+            <div class="buy-row">
+              <div><strong>{{ Number(vegetable.price) | currency:'INR':'symbol':'1.0-2' }}</strong><small> / {{ vegetable.unit }}</small></div>
+              <ion-button size="small" fill="outline" color="success" (click)="addToCart(vegetable)">＋ Add</ion-button>
+            </div>
+          </div>
+        </article>
+      }
+    </div>
+  }
+</section>
+@if (notice) { <div class="toast">{{ notice }}</div> }

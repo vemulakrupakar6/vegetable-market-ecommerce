@@ -1,0 +1,64 @@
+<section class="hero">
+      <div class="hero-copy">
+        <div class="eyebrow"><span></span> FRESH FROM THE MARKET</div>
+        <h1>Good food.<br><em>Good mood.</em></h1>
+        <p>Everyday vegetables, handpicked for your kitchen. Freshness you can see, quality you can taste.</p>
+        <a class="button button-light" href="#products">Shop vegetables <span>→</span></a>
+        <div class="hero-points"><span>✓ Fresh picks daily</span><span>✓ Pay on delivery</span></div>
+      </div>
+      <div class="hero-art">
+        <div class="hero-circle"></div>
+        <img src="https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=900&q=85" alt="Fresh vegetables in a basket">
+        <div class="fresh-tag"><strong>100%</strong><span>FRESH PICKS</span></div>
+      </div>
+      <div class="hero-bottom">LOCAL HARVEST <span>✳</span> EVERYDAY VALUE <span>✳</span> FRESH FOR YOU</div>
+    </section>
+
+    <section class="benefit-strip">
+      <div><span class="benefit-icon">✳</span><span><strong>Fresh every day</strong><small>Quality you can trust</small></span></div>
+      <div><span class="benefit-icon">⌂</span><span><strong>Easy home delivery</strong><small>From market to doorstep</small></span></div>
+      <div><span class="benefit-icon">₹</span><span><strong>Cash on delivery</strong><small>Pay when it arrives</small></span></div>
+    </section>
+
+    <section class="products-section" id="products">
+      <div class="section-heading">
+        <div><div class="eyebrow green-eyebrow">THE DAILY HARVEST</div><h2>Market <em>fresh picks</em></h2><p>Fresh essentials for your everyday meals.</p></div>
+        <div class="search-box"><span>⌕</span><input [(ngModel)]="search" (ngModelChange)="loadProducts()" placeholder="Search vegetables..." aria-label="Search vegetables"><kbd>⌘ K</kbd></div>
+      </div>
+
+      @if (loading) {
+        <div class="state-panel"><span class="spinner"></span><p>Loading fresh picks...</p></div>
+      } @else if (error) {
+        <div class="state-panel error-panel"><strong>We couldn't load the market.</strong><p>{{ error }}</p><button class="button button-green" (click)="loadProducts()">Try again</button></div>
+      } @else if (!vegetables.length) {
+        <div class="state-panel"><div class="empty-symbol">⌕</div><strong>No vegetables found</strong><p>Try another search.</p></div>
+      } @else {
+        <div class="product-grid">
+          @for (vegetable of vegetables; track vegetable.id) {
+            <article class="product-card">
+              <div class="product-photo">
+                @if (api.imageUrl(vegetable.image_url); as image) {
+                  <img [src]="image" [alt]="vegetable.name" (error)="imageFailed($event)">
+                } @else {
+                  <div class="photo-placeholder"><span>{{ vegetable.name.charAt(0) }}</span><small>FRESH PICK</small></div>
+                }
+                <span class="fresh-pill">FRESH</span>
+                @if (vegetable.stock_quantity <= 5) { <span class="stock-pill">Only {{ vegetable.stock_quantity }} left</span> }
+              </div>
+              <div class="product-info">
+                <div class="product-name-row"><h3>{{ vegetable.name }}</h3><span class="leaf">✳</span></div>
+                <p>{{ vegetable.description || 'Fresh market selection' }}</p>
+                <div class="product-buy-row">
+                  <div><strong>{{ Number(vegetable.price) | currency:'INR':'symbol':'1.2-2' }}</strong><small>per {{ vegetable.unit }}</small></div>
+                  <button class="add-button" [disabled]="!vegetable.is_available || vegetable.stock_quantity < 1" (click)="addToCart(vegetable)">
+                    {{ vegetable.stock_quantity < 1 || !vegetable.is_available ? 'Sold out' : '＋ Add' }}
+                  </button>
+                </div>
+              </div>
+            </article>
+          }
+        </div>
+      }
+      @if (notice) { <div class="toast" role="status">{{ notice }}</div> }
+    </section>
+    <section class="market-note"><span class="note-leaf">✳</span><div><strong>A little fresher. A little better.</strong><p>Simple shopping for the ingredients you love.</p></div><a routerLink="/cart">View your basket →</a></section>

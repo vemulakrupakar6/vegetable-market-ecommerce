@@ -1,0 +1,28 @@
+<ion-app>
+  <ion-header class="app-header">
+    <ion-toolbar>
+      <a class="brand" slot="start" routerLink="/">
+        <span class="brand-icon"><ion-icon name="leaf-outline"></ion-icon></span>
+        <span><strong>freshbasket</strong><small>FRESH FROM THE MARKET</small></span>
+      </a>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-content [fullscreen]="true" class="main-content">
+    <router-outlet></router-outlet>
+  </ion-content>
+
+  <ion-footer class="bottom-footer">
+    <ion-tab-bar>
+      <ion-tab-button routerLink="/" routerLinkActive="tab-selected" [routerLinkActiveOptions]="{ exact: true }">
+        <ion-icon name="home-outline"></ion-icon>
+        <ion-label>Shop</ion-label>
+      </ion-tab-button>
+      <ion-tab-button routerLink="/cart" routerLinkActive="tab-selected">
+        <ion-icon name="basket-outline"></ion-icon>
+        <ion-label>Basket</ion-label>
+        @if (cart.count > 0) { <ion-badge>{{ cart.count }}</ion-badge> }
+      </ion-tab-button>
+    </ion-tab-bar>
+  </ion-footer>
+</ion-app>

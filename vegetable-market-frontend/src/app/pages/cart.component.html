@@ -1,0 +1,69 @@
+<section class="page-wrap cart-page">
+      <a routerLink="/" class="back-link">← Continue shopping</a>
+      @if (success; as receipt) {
+        <div class="success-card">
+          <div class="success-check">✓</div>
+          <div class="eyebrow green-eyebrow">ORDER CONFIRMED</div>
+          <h1>Thank you, {{ receipt.customer_name }}.</h1>
+          <p>{{ receipt.message }}</p>
+          <div class="receipt-total"><span>Total to pay on delivery</span><strong>{{ receipt.total | currency:'INR':'symbol':'1.2-2' }}</strong></div>
+          <div class="receipt-lines">
+            @for (item of receipt.items; track item.id) {
+              <div><span>{{ item.name }} × {{ item.quantity }} {{ item.unit }}</span><strong>{{ item.line_total | currency:'INR':'symbol':'1.2-2' }}</strong></div>
+            }
+          </div>
+          <p class="muted-note">This demo does not save order details or provide order history.</p>
+          <a routerLink="/" class="button button-green">Continue shopping</a>
+        </div>
+      } @else {
+        <div class="eyebrow green-eyebrow">YOUR SELECTION</div>
+        <h1 class="page-title">Your <em>basket</em></h1>
+        <p class="page-subtitle">Review your fresh picks before checkout.</p>
+
+        @if (!cart.items.length) {
+          <div class="empty-cart">
+            <div class="empty-basket">▱</div><h2>Your basket is taking a break</h2><p>Add a few fresh picks to get started.</p>
+            <a routerLink="/" class="button button-green">Explore vegetables</a>
+          </div>
+        } @else {
+          <div class="cart-layout">
+            <div class="cart-items panel">
+              <div class="panel-heading"><h2>Basket items</h2><span>{{ cart.count }} items</span></div>
+              @for (item of cart.items; track item.vegetable.id) {
+                <div class="cart-item">
+                  <div class="cart-thumb">
+                    @if (api.imageUrl(item.vegetable.image_url); as image) {
+                      <img [src]="image" [alt]="item.vegetable.name">
+                    } @else { <span>{{ item.vegetable.name.charAt(0) }}</span> }
+                  </div>
+                  <div class="cart-item-info"><strong>{{ item.vegetable.name }}</strong><small>{{ Number(item.vegetable.price) | currency:'INR':'symbol':'1.2-2' }} / {{ item.vegetable.unit }}</small><button class="remove-link" (click)="cart.remove(item.vegetable.id)">Remove</button></div>
+                  <div class="quantity-control"><button (click)="cart.setQuantity(item.vegetable.id, item.quantity - 1)" aria-label="Decrease quantity">−</button><span>{{ item.quantity }}</span><button [disabled]="item.quantity >= item.vegetable.stock_quantity" (click)="cart.setQuantity(item.vegetable.id, item.quantity + 1)" aria-label="Increase quantity">＋</button></div>
+                  <strong class="line-total">{{ (Number(item.vegetable.price) * item.quantity) | currency:'INR':'symbol':'1.2-2' }}</strong>
+                </div>
+              }
+            </div>
+
+            <aside class="checkout-card panel">
+              <h2>Delivery & payment</h2>
+              <div class="cod-choice"><span class="cod-icon">₹</span><span><strong>Cash on Delivery</strong><small>Pay when your vegetables arrive</small></span><span class="radio-checked">✓</span></div>
+              <form (ngSubmit)="placeOrder()" #checkoutForm="ngForm">
+                <label for="customerName">Full name</label>
+                <input id="customerName" name="customer_name" [(ngModel)]="customer_name" required maxlength="100" placeholder="Your name">
+                <label for="phone">Mobile number</label>
+                <input id="phone" name="phone" [(ngModel)]="phone" required pattern="[0-9+() -]{7,20}" placeholder="10-digit phone number">
+                <label for="address">Delivery address</label>
+                <textarea id="address" name="address" [(ngModel)]="address" required maxlength="500" rows="3" placeholder="House number, street, area"></textarea>
+                <div class="bill-row"><span>Subtotal</span><strong>{{ cart.total | currency:'INR':'symbol':'1.2-2' }}</strong></div>
+                <div class="bill-row"><span>Delivery</span><strong class="free-label">FREE</strong></div>
+                <div class="bill-row bill-total"><span>Total</span><strong>{{ cart.total | currency:'INR':'symbol':'1.2-2' }}</strong></div>
+                @if (error) { <div class="form-error" role="alert">{{ error }}</div> }
+                <button class="button button-green checkout-button" type="submit" [disabled]="checkoutForm.invalid || placing">
+                  {{ placing ? 'Placing order...' : 'Place COD order · ' + (cart.total | currency:'INR':'symbol':'1.2-2') }}
+                </button>
+                <p class="secure-note">No online payment required.</p>
+              </form>
+            </aside>
+          </div>
+        }
+      }
+    </section>
